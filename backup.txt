@@ -1,0 +1,103 @@
+georgerapeanu@georgerapeanu-VirtualBox ~/Desktop/research/blackjack_ai $ python3
+Python 3.5.2 (default, Oct  8 2019, 13:06:37) 
+[GCC 5.4.0 20160609] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import utility as u
+>>> print("play_button = " + str(u.getCursorPosition()))
+play_button = (345, 450)
+>>> print("playButton = " + str(u.getCursorPosition()))
+playButton = (345, 450)
+>>> print("settingsButton = " + str(u.getCursorPosition()))
+settingsButton = (402, 450)
+>>> print("settingsBackButton = " + str(u.getCursorPosition()))
+settingsBackButton = (208, 246)
+>>> print("firstDeckOption = " + str(u.getCursorPosition()))
+firstDeckOption = (374, 293)
+>>> deckOptionDelta = (45,0)
+>>> print("dealer17Option = " + str(u.getCursorPosition()))
+dealer17Option = (370, 338)
+>>> print("insuranceOption = " + str(u.getCursorPosition()))
+insuranceOption = (379, 382)
+>>> print("autoAdviceOption = " + str(u.getCursorPosition()))
+autoAdviceOption = (364, 439)
+>>> print("autoLastBetOption = " + str(u.getCursorPosition()))
+autoLastBetOption = (373, 486)
+>>> print("newGameOption = " + str(u.getCursorPosition()))
+newGameOption = (369, 451)
+>>> print("continueGameOption = " + str(u.getCursorPosition()))
+continueGameOption = (441, 450)
+>>> print("bet1Button = " + str(u.getCursorPosition()))
+bet1Button = (210, 399)
+>>> print("bet10Button = " + str(u.getCursorPosition()))
+bet10Button = (208, 463)
+>>> print("bet100Button = " + str(u.getCursorPosition()))
+bet100Button = (255, 503)
+>>> print("bet500Button = " + str(u.getCursorPosition()))
+bet500Button = (307, 513)
+>>> print("dealButton = " + str(u.getCursorPosition()))
+dealButton = (335, 437)
+>>> print("hitButton = " + str(u.getCursorPosition()))
+hitButton = (334, 440)
+>>> print("standButton = " + str(u.getCursorPosition()))
+standButton = (523, 439)
+>>> print("DoubleButton = " + str(u.getCursorPosition()))
+DoubleButton = (240, 276)
+>>> print("insureButton = " + str(u.getCursorPosition()))
+insureButton = (470, 422)
+>>> print("closeAddButton = " + str(u.getCursorPosition()))
+closeAddButton = (576, 203)
+>>> print("to note: after skipping add it always jumps back to the main menu, regardless if the add is at the beginning or after you just lost")
+to note: after skipping add it always jumps back to the main menu, regardless if the add is at the beginning or after you just lost
+>>> print("splitButton = " + str(u.getCursorPosition()))splitButton = (387, 425)
+>>> print("now measuaring bounding boxes for my hand, my potentially second hand and the dealers hand")
+now measuaring bounding boxes for my hand, my potentially second hand and the dealers hand
+>>> print("main hand")
+main hand
+>>> print(str(u.getCursorPosition()))
+(256, 300)
+>>> print(str(u.getCursorPosition()))
+(393, 406)
+>>> print("dealer hand")
+dealer hand
+>>> print(str(u.getCursorPosition()))
+(441, 282)
+>>> print(str(u.getCursorPosition()))
+(537, 399)
+>>> print("side hand")
+side hand
+>>> print(str(u.getCursorPosition()))
+(399, 487)
+>>> print(str(u.getCursorPosition()))
+(517, 570)
+>>> print("i will now store this screenshot in both variants for help calibrating later")
+i will now store this screenshot in both variants for help calibrating later
+>>> u.
+u.Mouse(              u.__hash__(           u.__sizeof__(
+u.__cached__          u.__init__(           u.__spec__
+u.__class__(          u.__le__(             u.__str__(
+u.__delattr__(        u.__loader__          u.__subclasshook__(
+u.__dict__            u.__lt__(             u.gameGrab(
+u.__dir__(            u.__name__            u.getCursorPosition(
+u.__doc__             u.__ne__(             u.imageGrab
+u.__eq__(             u.__new__(            u.mouse
+u.__file__            u.__package__         u.mouseClick(
+u.__format__(         u.__reduce__(         u.moveCursor(
+u.__ge__(             u.__reduce_ex__(      u.os
+u.__getattribute__(   u.__repr__(           u.screenGrab(
+u.__gt__(             u.__setattr__(        u.time
+>>> im1 = u.imageGrab()
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: 'module' object is not callable
+>>> im1 = u.imageGrab()
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: 'module' object is not callable
+>>> im1 = u.screenGrab()
+>>> im1.save("default.png")
+>>> im2 = u.gameGrab()
+i>>> im2.save("game.png")
+>>> print("i hope that i took all needed measurements")
+i hope that i took all needed measurements
+>>> quit()
+
