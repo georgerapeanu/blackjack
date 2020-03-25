@@ -1,5 +1,3 @@
-#!/usr/bin/python3
-
 import os
 import time
 import pyscreenshot as imageGrab
@@ -41,6 +39,11 @@ doubleButton = (240, 276)
 insureButton = (470, 422)
 splitButton = (387, 425)
 
+mainHand = (256,300,393,406)
+sideHand = (399,487,517,570)
+dealerHand = (440,294,583,423)
+gameBox = (192,170,613,576)
+
 centerButton = (406,376)
 
 closeAddButton = (576, 203)
@@ -52,9 +55,21 @@ waitTime = 0.3
 def screenGrab():
     im = imageGrab.grab()
     return im
+
 def gameGrab():
-    box = (192,170,613,576)
-    im = screenGrab().crop(box)
+    im = imageGrab.grab(gameBox)
+    return im
+
+def mainHandGrab():
+    im = imageGrab.grab(mainHand)
+    return im
+
+def sideHandGrab():
+    im = imageGrab.grab(sideHand)
+    return im
+
+def dealerHandGrab():
+    im = imageGrab.grab(dealerHand)
     return im
 
 def getCursorPosition():

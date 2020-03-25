@@ -35,6 +35,6 @@ i will now store this screenshot in both variants for help calibrating later
 >>> im1 = u.screenGrab()
 >>> im1.save("default.png")
 >>> im2 = u.gameGrab()
-i>>> im2.save("game.png")
+>>> im2.save("game.png")
 i hope that i took all needed measurements
 
