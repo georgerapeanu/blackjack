@@ -9,8 +9,7 @@ import os
 ##the maximal difference between an extract and a recorded image so that the extract can be considered to look like that image
 ## a good split point diff for when the distance is euclidian is 2000
 ## however it looks like when the distance is just the sum of the absolute values of the differences, there is an even greater split at 50000. i will investigate further
-##an intuitive reason for which this distance metric is better, is that because the position of a shape is not constant, but the shape itself remains similar, that every absence of a pixel will be present in another part,so the cost doesnt increase as much as if they were not matching
-maxDiff = 50000
+diff = 2000
 relSymbolsPath = "../images/symbols"
 absSymbolsPath = os.path.join(os.path.dirname(os.path.abspath(__file__)),relSymbolsPath)
 cardSymbols = ['0','1','2','3','4','5','6','7','8','9','J','Q','K','A','10']
@@ -28,7 +27,7 @@ def dist(sample,extract):
 def getCards(image):
     cards = {}
 
-    thresh = cv2.inRange(,(109,109,109),(255,255,255))
+    thresh = cv2.inRange(image,(109,109,109),(255,255,255))
     thresh_rgb = cv2.cvtColor(thresh,cv2.COLOR_GRAY2RGB)
     contours, hier = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     digits_contours = []
@@ -55,32 +54,30 @@ def getCards(image):
     
     for x in range(0,len(extracts)):
         extract = extracts[x]
-        bstDist = 1e9
-        bstSymbol = -1
+        print("new extract")
+        cv2.imshow('extract',extract)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
         for symbol in cardSymbols:
+            print("symbols is " + str(symbol))
             sampleFilePath = os.path.join(absSymbolsPath,str(symbol))
+            bstdist = 1e9
             for filename in os.listdir(sampleFilePath):
                 if not (filename.endswith(".png")):
                     continue
                 filepath = os.path.join(sampleFilePath,filename)
                 sample = cv2.imread(filepath,cv2.IMREAD_COLOR)
-                tmpDist = dist(sample,extract)
-                if(tmpDist < bstDist):
-                    bstDist = tmpDist;
-                    bstSymbol = symbol
-        if bstDist <= maxDiff and bstSymbol != -1:
-            if(bstSymbol not in cards):
-                cards[bstSymbol] = 0
-            cards[bstSymbol] = cards[bstSymbol] + 1
-    
-    cards["10"] = 0;
-    if "0" in cards:
-        cards["10"] = cards["10"] + cards["0"] # because every 0 comes with a 1. i dont know yet which one of them is more reliable.
-        del cards["0"]
-    if "1" in cards:
-        del cards["1"]
-    if cards["10"] == 0:
-        del cards["10"]
+                bstdist = min(bstdist,dist(sample,extract))
+            print("bstdist is " + str(bstdist))
+        print("save file ?")
+        if(str(input()) == "y"):
+            print("what was it?")
+            ans = str(input())
+            print("ok so it was a " + str(ans))
+            sampleFilePath = os.path.join(absSymbolsPath,str(ans))
+            savePath = os.path.join(sampleFilePath,(str(len(os.listdir(sampleFilePath))) + ".png"))
+            print("save as " + savePath)
+            cv2.imwrite(savePath,extract)
+                
 
-    return cards;
-            
+#compare them with each thing

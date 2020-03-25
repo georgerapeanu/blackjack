@@ -2,6 +2,8 @@ import os
 import time
 import pyscreenshot as imageGrab
 from autopilot.input import Mouse
+import numpy
+import cv2
 
 ### config and init stuff
 
@@ -51,26 +53,29 @@ closeAddButton = (576, 203)
 waitTime = 0.3
 
 ### end of config and init
-    
+
+def convert2cv2(im):
+    return numpy.array(im.convert('RGB'))
+
 def screenGrab():
     im = imageGrab.grab()
-    return im
+    return convert2cv2(im)
 
 def gameGrab():
     im = imageGrab.grab(gameBox)
-    return im
+    return convert2cv2(im)
 
 def mainHandGrab():
     im = imageGrab.grab(mainHand)
-    return im
+    return convert2cv2(im)
 
 def sideHandGrab():
     im = imageGrab.grab(sideHand)
-    return im
+    return convert2cv2(im)
 
 def dealerHandGrab():
     im = imageGrab.grab(dealerHand)
-    return im
+    return convert2cv2(im)
 
 def getCursorPosition():
     return (mouse.x,mouse.y)
