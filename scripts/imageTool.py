@@ -8,10 +8,6 @@ import os
 def getCards(image):
     cards = {}
 
-for filename in os.listdir("./"):
-    if not (filename.endswith(".png")):
-        continue
-    image = numpy.array(PIL.Image.open(filename).convert('RGB'))
     thresh = cv2.inRange(image,(109,109,109),(255,255,255))
     thresh_rgb = cv2.cvtColor(thresh,cv2.COLOR_GRAY2RGB)
     contours, hier = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
@@ -25,7 +21,7 @@ for filename in os.listdir("./"):
         if 5 <= w and w <= 25 and 15 <= h and h <= 25:
             digits_contours.append(c)
 
-#    cv2.drawContours(image,contours,-1,(0,255,0),1)
+    cv2.drawContours(image,contours,-1,(0,255,0),1)
 
     extracts = []
     for c in digits_contours:
@@ -38,23 +34,24 @@ for filename in os.listdir("./"):
         if theta < 0 and 90 + theta < -theta:
             theta = 90 + theta
         M = cv2.getRotationMatrix2D( center, theta, 1)
-        extract = cv2.warpAffine(thresh_rgb, M, (image.shape[0] * 2,image.shape[1] * 2))
+        extract = cv2.warpAffine(thresh_rgb, M, (int(1.4 * image.shape[0]),int(1.4 * image.shape[1])))
         extract = cv2.getRectSubPix(extract, size, center);
-        extract = cv2.resize(extract,(20,20))
+        extract = cv2.resize(extract,(30,30))
         extracts.append(extract)
         cv2.drawContours(processed_image, [box], 0, (0,255,0), 1)
     
     final_image = numpy.hstack((image,thresh_rgb,processed_image))
     
-    #cv2.imshow('final',final_image)
-    #cv2.waitKey()
-    cv2.imwrite(filename + "_mask.png",final_image)
+    cv2.imshow('final',final_image)
+    cv2.waitKey()
+    #cv2.imwrite(filename + "_mask.png",final_image)
     
-    #final_extracts = numpy.hstack(tuple(extracts))
+    final_extracts = numpy.hstack(tuple(extracts))
     
-    #cv2.imshow('symbols',final_extracts)
-    #cv2.waitKey()
+    cv2.imshow('symbols',final_extracts)
+    cv2.waitKey()
     #cv2.imwrite(im + "_symbols.png",final_extracts)
 
-    for x in range(0,len(extracts)):
-        cv2.imwrite(filename + "_" + str(x) + "_symbol.png",extracts[x])
+#    for x in range(0,len(extracts)):
+#        cv2.imshow("symbol.png",extracts[x])
+#        cv2.waitKey()

@@ -6,29 +6,25 @@ import numpy
 import os
 
 ###init stuff
-##the maximal difference between an extract and a recorded image so that the extract can be considered to look like that image
-## a good split point diff for when the distance is euclidian is 2000
-## however it looks like when the distance is just the sum of the absolute values of the differences, there is an even greater split at 50000. i will investigate further
-##an intuitive reason for which this distance metric is better, is that because the position of a shape is not constant, but the shape itself remains similar, that every absence of a pixel will be present in another part,so the cost doesnt increase as much as if they were not matching
-maxDiff = 50000
 relSymbolsPath = "../images/symbols"
 absSymbolsPath = os.path.join(os.path.dirname(os.path.abspath(__file__)),relSymbolsPath)
-cardSymbols = ['0','1','2','3','4','5','6','7','8','9','J','Q','K','A','10']
+cardSymbols = ['0','1','2','3','4','5','6','7','8','9','J','Q','K','A','10','symbol']
 ###
 ###cv2 image
 
-def dist(sample,extract):
+def dist(sample,extract,bstDist):
     ans = 0
     for lin in range(0,len(sample)):
         for col in range(0,len(sample[lin])):
-            for px in range(0,len(sample[lin][col])):
-                ans = ans + abs(int(sample[lin][col][px]) - int(extract[lin][col][px]))
+            ans = ans + abs(int(sample[lin][col][0]) - int(extract[lin][col][0]))
+            if ans >= bstDist:
+                return bstDist + 1; 
     return ans
 
 def getCards(image):
-    cards = {}
+    cards = []
 
-    thresh = cv2.inRange(,(109,109,109),(255,255,255))
+    thresh = cv2.inRange(image,(109,109,109),(255,255,255))
     thresh_rgb = cv2.cvtColor(thresh,cv2.COLOR_GRAY2RGB)
     contours, hier = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     digits_contours = []
@@ -48,9 +44,9 @@ def getCards(image):
         if theta < 0 and 90 + theta < -theta:
             theta = 90 + theta
         M = cv2.getRotationMatrix2D( center, theta, 1)
-        extract = cv2.warpAffine(thresh_rgb, M, (image.shape[0] * 2,image.shape[1] * 2))
-        extract = cv2.getRectSubPix(extract, size, center)
-        extract = cv2.resize(extract,(20,20))
+        extract = cv2.warpAffine(thresh_rgb, M, (int(1.4 * image.shape[0]),int(1.4 * image.shape[1])))
+        extract = cv2.getRectSubPix(extract, size, center);
+        extract = cv2.resize(extract,(30,30))
         extracts.append(extract)
     
     for x in range(0,len(extracts)):
@@ -64,23 +60,17 @@ def getCards(image):
                     continue
                 filepath = os.path.join(sampleFilePath,filename)
                 sample = cv2.imread(filepath,cv2.IMREAD_COLOR)
-                tmpDist = dist(sample,extract)
+                tmpDist = dist(sample,extract,bstDist)
                 if(tmpDist < bstDist):
                     bstDist = tmpDist;
                     bstSymbol = symbol
-        if bstDist <= maxDiff and bstSymbol != -1:
-            if(bstSymbol not in cards):
-                cards[bstSymbol] = 0
-            cards[bstSymbol] = cards[bstSymbol] + 1
-    
-    cards["10"] = 0;
-    if "0" in cards:
-        cards["10"] = cards["10"] + cards["0"] # because every 0 comes with a 1. i dont know yet which one of them is more reliable.
-        del cards["0"]
-    if "1" in cards:
-        del cards["1"]
-    if cards["10"] == 0:
-        del cards["10"]
+        if bstSymbol == 'symbol':
+            continue
+        elif bstSymbol == "0":#0's and 1's usually come together, and I think that 0 is more reliable
+            cards.append('10')
+        elif bstSymbol != "1":
+            cards.append(bstSymbol) 
+
 
     return cards;
             
